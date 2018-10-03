@@ -1,8 +1,8 @@
 <?php
 /**
- * The template to display the reviewers star rating in reviews
+ * The template to display the reviewers meta data (name, verified owner, review date)
  *
- * This template can be overridden by copying it to yourtheme/woocommerce/review-rating.php.
+ * This template can be overridden by copying it to yourtheme/woocommerce/single-product/review-meta.php.
  *
  * HOWEVER, on occasion WooCommerce will need to update template files and you
  * (the theme developer) will need to copy the new files to your theme to
@@ -11,18 +11,35 @@
  * the readme will list any important changes.
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
- * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 3.1.0
+ * @version 3.4.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
-}
+defined( 'ABSPATH' ) || exit;
 
 global $comment;
-$rating = intval( get_comment_meta( $comment->comment_ID, 'rating', true ) );
+$verified = wc_review_is_from_verified_owner( $comment->comment_ID );
 
-if ( $rating && 'yes' === get_option( 'woocommerce_enable_review_rating' ) ) {
-	echo wc_get_rating_html( $rating );
+if ( '0' === $comment->comment_approved ) { ?>
+
+	<p class="meta">
+		<em class="woocommerce-review__awaiting-approval">
+			<?php esc_html_e( 'Your review is awaiting approval', 'woocommerce' ); ?>
+		</em>
+	</p>
+
+<?php } else { ?>
+
+	<p class="meta">
+		<strong class="woocommerce-review__author"><?php comment_author(); ?> <?php echo do_shortcode( '[types usermeta="agent-verfied" output="raw" user_is_author="true"][/types]' ); ?> - <?php echo do_shortcode( '[types usermeta="rank-on-team" user_is_author="true"][/types]' ); ?> <?php echo do_shortcode( '[types usermeta="years-in-swat" output="raw" user_is_author="true"][/types]' ); ?>Years </strong>
+		<?php
+		if ( 'yes' === get_option( 'woocommerce_review_rating_verification_label' ) && $verified ) {
+			echo '<em class="woocommerce-review__verified verified">(' . esc_attr__( 'verified owner', 'woocommerce' ) . ')</em> ';
+		}
+
+		?>
+		<span class="woocommerce-review__dash">&ndash;</span> <time class="woocommerce-review__published-date" datetime="<?php echo esc_attr( get_comment_date( 'c' ) ); ?>"><?php echo esc_html( get_comment_date( wc_date_format() ) ); ?></time>
+	</p>
+
+<?php
 }
