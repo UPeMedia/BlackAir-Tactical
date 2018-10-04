@@ -31,7 +31,7 @@ if ( '0' === $comment->comment_approved ) { ?>
 <?php } else { ?>
 
 	<p class="meta">
-		<strong class="woocommerce-review__author"><?php comment_author(); ?> <?php echo do_shortcode( '[types usermeta="agent-verfied" output="raw" user_is_author="true"][/types]' ); ?> - <?php echo do_shortcode( '[types usermeta="rank-on-team" user_is_author="true"][/types]' ); ?> <?php echo do_shortcode( '[types usermeta="years-in-swat" output="raw" user_is_author="true"][/types]' ); ?>Years </strong>
+		<strong class="woocommerce-review__author"><?php comment_author(); ?></strong> <?php echo do_shortcode( '[types usermeta="agent-verfied" output="raw" user_is_author="true"][/types]' ); ?> - <?php echo do_shortcode( '[types usermeta="rank-on-team" user_is_author="true"][/types]' ); ?> <?php echo do_shortcode( '[types usermeta="years-in-swat" output="raw" user_is_author="true"][/types]' ); ?>Years 
 		<?php
 		if ( 'yes' === get_option( 'woocommerce_review_rating_verification_label' ) && $verified ) {
 			echo '<em class="woocommerce-review__verified verified">(' . esc_attr__( 'verified owner', 'woocommerce' ) . ')</em> ';
